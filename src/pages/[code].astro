@@ -1,0 +1,53 @@
+---
+import { availabilityFor, getLinkByCode } from '../lib/links.js';
+
+const link = await getLinkByCode(Astro.params.code);
+const availability = availabilityFor(link);
+
+if (availability.status === 'active') {
+  return Astro.redirect(link.destinationUrl, 302);
+}
+
+Astro.response.status = availability.status === 'missing' ? 404 : 410;
+Astro.response.statusText = availability.status === 'missing' ? 'Not Found' : 'Gone';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Link Unavailable</title>
+    <link rel="stylesheet" href="https://www.mayoclinic.org/mayofonts/Fonts/mayo/fonts.css" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="unavailable-body">
+    <main class="unavailable-page">
+      <div class="brand-lockup unavailable-brand" aria-label="Mayo Clinic">
+        <img class="brand-logo" src="/mayo-clinic-logo.svg" alt="" width="44" height="44" />
+        <span>Mayo Clinic</span>
+      </div>
+
+      <section class="unavailable-panel">
+        <p class="eyebrow">Trusted Link Notice</p>
+        <h1>Link Unavailable</h1>
+        <p>{availability.reason}</p>
+        {
+          link && (
+            <dl class="notice-details">
+              <div>
+                <dt>Registered item</dt>
+                <dd>{link.title}</dd>
+              </div>
+              <div>
+                <dt>Owner</dt>
+                <dd>{link.owner || 'Unassigned'}</dd>
+              </div>
+            </dl>
+          )
+        }
+        <a class="primary-action notice-action" href="/">Open Registry</a>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,325 @@
+---
+import { availabilityFor, listLinks, shortUrlFor } from '../lib/links.js';
+
+const links = await listLinks();
+const totalLinks = links.length;
+const activeLinks = links.filter((link) => availabilityFor(link).status === 'active').length;
+const unavailableLinks = totalLinks - activeLinks;
+
+function formattedDate(value) {
+  if (!value) {
+    return 'No expiration';
+  }
+
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit'
+  }).format(new Date(value));
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Proof-of-concept branded short URL and QR code registry for governed organizational links."
+    />
+    <title>Trusted Links Registry</title>
+    <link rel="stylesheet" href="https://www.mayoclinic.org/mayofonts/Fonts/mayo/fonts.css" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Enterprise URL Governance POC</p>
+        <h1>Trusted Links Registry</h1>
+        <p class="lede">Stable branded links and QR codes with editable destinations.</p>
+      </div>
+      <div class="brand-lockup" aria-label="Mayo Clinic">
+        <img class="brand-logo" src="/mayo-clinic-logo.svg" alt="" width="44" height="44" />
+        <span>Mayo Clinic</span>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="summary-strip" aria-label="Registry summary">
+        <div>
+          <span class="metric">{totalLinks}</span>
+          <span class="metric-label">Registered</span>
+        </div>
+        <div>
+          <span class="metric">{activeLinks}</span>
+          <span class="metric-label">Available</span>
+        </div>
+        <div>
+          <span class="metric">{unavailableLinks}</span>
+          <span class="metric-label">Unavailable</span>
+        </div>
+      </section>
+
+      <section class="tool-layout">
+        <aside class="create-panel" aria-labelledby="create-heading">
+          <div class="section-heading">
+            <p class="eyebrow">New Redirect</p>
+            <h2 id="create-heading">Create Link</h2>
+          </div>
+
+          <form id="create-form" class="stacked-form">
+            <label>
+              <span>Title</span>
+              <input name="title" autocomplete="off" required placeholder="Campaign or material name" />
+            </label>
+
+            <label>
+              <span>Destination URL</span>
+              <input name="destinationUrl" type="url" required placeholder="https://www.example.org/..." />
+            </label>
+
+            <label>
+              <span>Custom slug</span>
+              <input name="customSlug" autocomplete="off" placeholder="Optional" maxlength="32" />
+            </label>
+
+            <label>
+              <span>Expiration</span>
+              <input name="expiresAt" type="datetime-local" />
+            </label>
+
+            <label>
+              <span>Owner</span>
+              <input name="owner" autocomplete="off" placeholder="Department or steward" />
+            </label>
+
+            <label>
+              <span>Notes</span>
+              <textarea name="notes" rows="4" placeholder="Governance notes, channel, campaign, or print use"></textarea>
+            </label>
+
+            <label class="check-row">
+              <input name="active" type="checkbox" checked />
+              <span>Active</span>
+            </label>
+
+            <button class="primary-action" type="submit">Create Stable Link</button>
+            <p class="form-message" id="create-message" role="status" aria-live="polite"></p>
+          </form>
+        </aside>
+
+        <section class="registry" id="registry" aria-labelledby="registry-heading">
+          <div class="section-heading registry-heading">
+            <div>
+              <p class="eyebrow">Managed Inventory</p>
+              <h2 id="registry-heading">Redirect Items</h2>
+            </div>
+          </div>
+
+          <div class="registry-list">
+            {
+              links.map((link) => {
+                const availability = availabilityFor(link);
+                const shortUrl = shortUrlFor(link, Astro.request);
+
+                return (
+                  <details class={`link-item status-${availability.status}`}>
+                    <summary class="link-summary">
+                      <span class="summary-copy">
+                        <span class="summary-title">{link.title}</span>
+                        <span class="status-pill">{availability.label}</span>
+                      </span>
+                    </summary>
+
+                    <div class="link-details">
+                      <div class="link-identity">
+                        <img
+                          class="qr-preview"
+                          src={`/api/qr/${link.code}.svg?size=small&variant=branded`}
+                          alt={`Branded QR code for ${link.title}`}
+                          width="164"
+                          height="184"
+                        />
+                        <div class="link-copy">
+                          <div class="short-url-block">
+                            <span class="short-url-label">Short URL</span>
+                            <a class="short-url" href={`/${link.code}`} target="_blank" rel="noreferrer">
+                              {shortUrl}
+                            </a>
+                            <button type="button" class="ghost-action copy-action" data-copy={shortUrl}>Copy URL</button>
+                          </div>
+                          <p>{availability.reason}</p>
+
+                          <div class="action-groups" aria-label={`${link.title} QR downloads`}>
+                            <div class="action-group">
+                              <span class="action-label">Plain QR</span>
+                              <div class="action-buttons">
+                                <a class="ghost-action" href={`/api/qr/${link.code}.png?size=small`} download>
+                                  PNG S
+                                </a>
+                                <a class="ghost-action" href={`/api/qr/${link.code}.png?size=medium`} download>
+                                  PNG M
+                                </a>
+                                <a class="ghost-action" href={`/api/qr/${link.code}.png?size=large`} download>
+                                  PNG L
+                                </a>
+                                <a class="ghost-action" href={`/api/qr/${link.code}.svg?size=medium`} download>
+                                  SVG
+                                </a>
+                              </div>
+                            </div>
+
+                            <div class="action-group">
+                              <span class="action-label">Branded QR</span>
+                              <div class="action-buttons">
+                                <a class="ghost-action" href={`/api/qr/${link.code}.png?size=large&variant=branded`} download>
+                                  PNG
+                                </a>
+                                <a class="ghost-action" href={`/api/qr/${link.code}.svg?size=large&variant=branded`} download>
+                                  SVG
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <form class="edit-form" data-id={link.id}>
+                        <div class="field-grid">
+                          <label>
+                            <span>Title</span>
+                            <input name="title" value={link.title} required />
+                          </label>
+                          <label>
+                            <span>Destination URL</span>
+                            <input name="destinationUrl" type="url" value={link.destinationUrl} required />
+                          </label>
+                          <label>
+                            <span>Expiration</span>
+                            <input name="expiresAt" type="datetime-local" value={link.expiresAt} />
+                          </label>
+                          <label>
+                            <span>Owner</span>
+                            <input name="owner" value={link.owner} />
+                          </label>
+                        </div>
+
+                        <label class="notes-field">
+                          <span>Notes</span>
+                          <textarea name="notes" rows="2">{link.notes}</textarea>
+                        </label>
+
+                        <div class="governance-row">
+                          <label class="check-row">
+                            <input name="active" type="checkbox" checked={link.active} />
+                            <span>Active</span>
+                          </label>
+                          <span class="expires-label">{formattedDate(link.expiresAt)}</span>
+                        </div>
+
+                        <div class="save-row">
+                          <button type="submit" class="secondary-action save-action">Save</button>
+                          <p class="form-message" role="status" aria-live="polite"></p>
+                        </div>
+                      </form>
+                    </div>
+                  </details>
+                );
+              })
+            }
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script>
+      const createForm = document.querySelector('#create-form');
+      const createMessage = document.querySelector('#create-message');
+
+      createForm?.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        createMessage.textContent = 'Creating...';
+        const button = createForm.querySelector('button[type="submit"]');
+        button.disabled = true;
+
+        try {
+          const response = await fetch('/api/links', {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json'
+            },
+            body: JSON.stringify(formPayload(createForm))
+          });
+          const result = await response.json();
+
+          if (!response.ok) {
+            throw new Error(result.error || 'Unable to create link.');
+          }
+
+          window.location.href = `/#registry`;
+          window.location.reload();
+        } catch (error) {
+          createMessage.textContent = error.message;
+          button.disabled = false;
+        }
+      });
+
+      document.querySelectorAll('.edit-form').forEach((form) => {
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const message = form.querySelector('.form-message');
+          const button = form.querySelector('button[type="submit"]');
+          message.textContent = 'Saving...';
+          button.disabled = true;
+
+          try {
+            const response = await fetch(`/api/links/${form.dataset.id}`, {
+              method: 'PATCH',
+              headers: {
+                'content-type': 'application/json'
+              },
+              body: JSON.stringify(formPayload(form))
+            });
+            const result = await response.json();
+
+            if (!response.ok) {
+              throw new Error(result.error || 'Unable to save link.');
+            }
+
+            message.textContent = 'Saved.';
+            setTimeout(() => window.location.reload(), 350);
+          } catch (error) {
+            message.textContent = error.message;
+            button.disabled = false;
+          }
+        });
+      });
+
+      document.querySelectorAll('[data-copy]').forEach((button) => {
+        button.addEventListener('click', async () => {
+          await navigator.clipboard.writeText(button.dataset.copy);
+          button.textContent = 'Copied';
+          setTimeout(() => {
+            button.textContent = 'Copy URL';
+          }, 1200);
+        });
+      });
+
+      function formPayload(form) {
+        const formData = new FormData(form);
+        return {
+          title: formData.get('title'),
+          destinationUrl: formData.get('destinationUrl'),
+          customSlug: formData.get('customSlug'),
+          expiresAt: formData.get('expiresAt'),
+          active: formData.get('active') === 'on',
+          owner: formData.get('owner'),
+          notes: formData.get('notes')
+        };
+      }
+    </script>
+  </body>
+</html>
