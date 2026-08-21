@@ -1,9 +1,20 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
+import seedLinks from '../../data/links.json' with { type: 'json' };
 
 const alphabet = '23456789abcdefghjkmnpqrstuvwxyz';
 const defaultStorePath = './data/links.json';
+const blobStoreName = process.env.LINK_BLOBS_STORE || 'shortcodes';
+const blobStoreKey = process.env.LINK_BLOBS_KEY || 'links';
+
+function shouldUseNetlifyBlobs() {
+  return (
+    process.env.LINK_STORAGE === 'netlify-blobs' ||
+    process.env.NETLIFY === 'true' ||
+    Boolean(process.env.NETLIFY_BLOBS_CONTEXT)
+  );
+}
 
 function storePath() {
   const configuredPath = process.env.LINK_STORE_PATH || defaultStorePath;
@@ -28,19 +39,60 @@ async function ensureStore() {
 }
 
 async function readLinks() {
+  if (shouldUseNetlifyBlobs()) {
+    return readBlobLinks();
+  }
+
+  return readFileLinks();
+}
+
+async function writeLinks(links) {
+  if (shouldUseNetlifyBlobs()) {
+    await writeBlobLinks(links);
+    return;
+  }
+
+  await writeFileLinks(links);
+}
+
+async function readFileLinks() {
   await ensureStore();
   const raw = await readFile(storePath(), 'utf8');
   return JSON.parse(raw);
 }
 
-async function writeLinks(links) {
+async function writeFileLinks(links) {
   await ensureStore();
   await writeFile(storePath(), `${JSON.stringify(links, null, 2)}\n`);
 }
 
+async function readBlobLinks() {
+  const store = await blobStore();
+  const links = await store.get(blobStoreKey, {
+    consistency: 'strong',
+    type: 'json'
+  });
+
+  return links || cloneSeedLinks();
+}
+
+async function writeBlobLinks(links) {
+  const store = await blobStore();
+  await store.setJSON(blobStoreKey, links);
+}
+
+async function blobStore() {
+  const { getStore } = await import('@netlify/blobs');
+  return getStore(blobStoreName);
+}
+
+function cloneSeedLinks() {
+  return seedLinks.map((link) => ({ ...link }));
+}
+
 export async function listLinks() {
   const links = await readLinks();
-  return links.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+  return [...links].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
 }
 
 export async function getLinkByCode(code) {

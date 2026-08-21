@@ -14,10 +14,11 @@
     "gcp-build": "npm run build"
   },
   "dependencies": {
+    "@astrojs/netlify": "^8.2.3",
     "@astrojs/node": "^11.1.4",
+    "@netlify/blobs": "^10.7.13",
     "astro": "^7.2.4",
     "qrcode": "^1.5.4",
     "sharp": "^0.35.3"
-  },
-  "devDependencies": {}
+  }
 }
