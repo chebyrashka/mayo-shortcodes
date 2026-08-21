@@ -32,6 +32,23 @@ Copy `.env.example` to `.env` if you want to override defaults.
 
 ## Deploy Notes
 
-This POC uses local JSON file storage, which is appropriate for demos and local review. For a hosted environment, replace the storage module with durable storage such as SQLite, Postgres, or a platform KV/database service.
+This POC uses local JSON file storage, which is appropriate for demos and local review. For a hosted environment, replace the storage module with durable storage such as Firestore, Cloud SQL, SQLite on a persistent Node host, Postgres, or a platform KV/database service.
+
+## Viewable Demo on Google Cloud Run
+
+This repo includes a `Dockerfile` for a simple Cloud Run-compatible demo deployment.
+
+```sh
+gcloud run deploy cdp-alpha-shortcodes --source .
+```
+
+The app includes `start` and `gcp-build` scripts so Google Cloud buildpacks can build and run it from source. The `Dockerfile` is also available if the deployment pipeline prefers explicit container builds.
+
+Suggested Cloud Run environment variables:
+
+- `PUBLIC_BASE_URL`: the deployed service URL or branded custom domain.
+- `LINK_STORE_PATH`: leave as `./data/links.json` for a temporary demo.
+
+The current JSON storage is ephemeral in Cloud Run. Seed links will be available, and edits can work for a running demo instance, but changes should not be treated as durable across restarts, redeploys, or scaling events.
 
 For an internal production version, add authentication, role-based governance, audit history, link ownership, review workflow, analytics, malware/phishing checks, and domain allow-lists before launch.
