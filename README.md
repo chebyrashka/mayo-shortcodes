@@ -2,6 +2,8 @@
 
 A proof-of-concept internal tool for governed branded short URLs and scan-safe QR codes. Short URLs stay stable while destinations can be edited later, so printed QR codes, signage, email links, and campaign materials do not need to change when a destination changes.
 
+This prototype is intended for internal review and demonstration.
+
 ## Features
 
 - Create redirect items with title, destination, generated code, optional custom slug, expiration, status, owner, and notes.
