@@ -1,0 +1,293 @@
+---
+import { brandedQrSvg } from '../lib/qr.js';
+
+export const prerender = true;
+
+const researchUrl = 'https://mayoclinic.org/Document/Research/Research-Innovation-Clinical-Trials-Program-Overview-2026-Final-Approved-v3.pdf';
+const brandedSampleQr = await brandedQrSvg(
+  'https://short.healthcare.org/care26',
+  'medium',
+  'Care Access Campaign'
+);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Four practical uses for branded QR codes and short links: print and digital materials, simpler document URLs, editable destinations, and QR sizes, styles and formats." />
+    <title>Branded Links &amp; QR Codes | Overview</title>
+    <link rel="stylesheet" href="https://www.mayoclinic.org/mayofonts/Fonts/mayo/fonts.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="masthead">
+        <a href="/" class="registry-link">Back to registry</a>
+        <button type="button" id="print-overview">Print / Save PDF</button>
+      </header>
+
+      <main>
+        <header class="intro">
+          <p class="eyebrow">Branded Links &amp; QR Codes</p>
+          <h1>Print once.<br />Keep the destination current.</h1>
+          <p class="lead">A recognizable short link. A consistent QR code. An editable destination behind both.</p>
+        </header>
+
+        <div class="benefits" aria-label="Key benefits">
+          <div><h2>Fewer avoidable reprints</h2><p>Update destinations without replacing materials.</p></div>
+          <div><h2>A recognizable brand</h2><p>Carry a consistent identity across every touchpoint.</p></div>
+          <div><h2>Clearer ownership</h2><p>Keep owners, notes, status and expiration together.</p></div>
+        </div>
+
+        <section class="use-case" aria-labelledby="qr-heading">
+          <div class="case-copy">
+            <p class="eyebrow case-number">Use case one</p>
+            <h2 id="qr-heading">Branded QR codes.<br />Print and digital.</h2>
+            <p>Bring your organization's identity to brochures, posters, signage, digital displays and presentations. Each QR code points to a managed short URL.</p>
+            <p class="outcome">One recognizable code across physical and digital materials.</p>
+          </div>
+          <figure class="qr-example">
+            <div class="branded-preview" set:html={brandedSampleQr} />
+            <figcaption>Care Access Campaign<br />Branded QR with title and logo</figcaption>
+          </figure>
+        </section>
+
+        <section class="use-case" aria-labelledby="short-heading">
+          <div class="case-copy">
+            <p class="eyebrow case-number">Use case two</p>
+            <h2 id="short-heading">Long address.<br />Short, shareable link.</h2>
+            <p>Replace a lengthy document address with a short URL that's easier to read, type and share in an email, presentation or printed piece.</p>
+            <p class="outcome">Share the simple link. Keep the full destination behind it.</p>
+          </div>
+          <div class="url-example">
+            <p class="example-label">Long destination</p>
+            <code class="long-url">{researchUrl}</code>
+            <div class="short-result">
+              <p class="example-label">Share instead</p>
+              <code class="short-url">short.healthcare.org/research</code>
+            </div>
+          </div>
+        </section>
+
+        <section class="use-case" aria-labelledby="stable-heading">
+          <div class="case-copy">
+            <p class="eyebrow case-number">Use case three</p>
+            <h2 id="stable-heading">New PDF.<br />Same link and QR code.</h2>
+            <p>Publish a link to the annual report. When next year's PDF arrives or the filename changes, update the destination in the registry.</p>
+            <p class="outcome">Existing materials still lead to the report you choose.</p>
+          </div>
+          <div class="url-example annual-example">
+            <p class="example-label">Stays the same</p>
+            <code class="short-url">short.healthcare.org/annual-report</code>
+            <dl class="destination-history">
+              <div><dt>Before</dt><dd><code>mayoclinic.org/Document/Research/<strong>Annual-Report-2025-Final-v2.pdf</strong></code></dd></div>
+              <div><dt>After</dt><dd><code>mayoclinic.org/Document/Research/<strong>Annual-Report-2026-Approved.pdf</strong></code></dd></div>
+            </dl>
+          </div>
+        </section>
+
+        <section class="use-case" aria-labelledby="formats-heading">
+          <div class="case-copy">
+            <p class="eyebrow case-number">Use case four</p>
+            <h2 id="formats-heading">The right QR code.<br />For every placement.</h2>
+            <p>Choose a size, style and file format to suit the material, from a small handout to a large display. Every version points to the same short URL.</p>
+            <dl class="qr-options">
+              <div><dt>Sizes</dt><dd>Small, medium and large exports.</dd></div>
+              <div><dt>Styles</dt><dd>Plain QR codes or a branded design with a title, logo and rounded modules.</dd></div>
+              <div><dt>Formats</dt><dd>PNG for everyday use; scalable SVG for design and print layouts.</dd></div>
+            </dl>
+            <p class="outcome">Different treatments. One consistent destination.</p>
+          </div>
+          <figure class="qr-example">
+            <div class="branded-preview" set:html={brandedSampleQr} />
+            <figcaption>Care Access Campaign<br />Generated with the app's branded QR template</figcaption>
+          </figure>
+        </section>
+
+        <section class="more-uses" aria-labelledby="more-uses-heading">
+          <header>
+            <p class="eyebrow">Beyond the first four</p>
+            <h2 id="more-uses-heading">More ways to use it</h2>
+            <p class="more-intro">Keep links useful long after the materials have been shared.</p>
+          </header>
+          <div class="more-uses-grid">
+            <article>
+              <h3>Website moves. Links keep working.</h3>
+              <p>When a department reorganizes its website or changes platforms, update the destinations in the registry. Existing short links in brochures, emails and signage can still reach the right pages.</p>
+            </article>
+            <article>
+              <h3>Campaign over. Link retired.</h3>
+              <p>Set an expiration for event registration, surveys or time-limited campaigns. Pause or expire the link to show an intentional unavailable message instead of sending visitors to an outdated form.</p>
+            </article>
+            <article>
+              <h3>Staff changes. Ownership stays clear.</h3>
+              <p>A poster can outlast the person who created it. Owner and notes fields help the next team member identify what a link is for, where it is used and who should maintain it.</p>
+            </article>
+            <article>
+              <h3>A readable alternative to scanning.</h3>
+              <p>Place a short URL beside the QR code so people can type it, share it by phone or use it when scanning is inconvenient. Both routes lead to the same resource.</p>
+            </article>
+            <article class="channel-use">
+              <h3>Different channels. One destination.</h3>
+              <p>Give a poster, email and brochure their own short links, all pointing to the same page. Keep each placement identifiable in the registry.</p>
+              <p class="future-note"><strong>Future capability:</strong> With analytics added, compare engagement across those placements.</p>
+            </article>
+          </div>
+          <aside class="naming-note" aria-labelledby="naming-heading">
+            <h3 id="naming-heading">Latest edition or a specific year?</h3>
+            <p>Use <code>/annual-report</code> for the latest report, updating its destination as new editions arrive. Use <code>/annual-report-2025</code> for a year-specific archive that stays tied to that edition.</p>
+          </aside>
+        </section>
+
+        <aside class="pilot">
+          <h2>A simple pilot</h2>
+          <p>One team. One campaign. Ten links.<br />Test a destination change before reprinting.</p>
+        </aside>
+      </main>
+
+      <footer>
+        <p>Illustrative URLs and QR codes only; these examples are not configured live destinations.</p>
+        <p>The demo includes editable links, QR exports, owner fields, status and expiration. Self-service logo uploads, brand kits and engagement analytics are future capabilities.</p>
+      </footer>
+    </div>
+    <script>
+      document.querySelector('#print-overview')?.addEventListener('click', () => window.print());
+    </script>
+  </body>
+</html>
+
+<style>
+  :global(*) { box-sizing: border-box; }
+  :global(body) {
+    margin: 0;
+    background: #fff;
+    color: #172b40;
+    font-family: 'mayo-sans', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    border-top: 6px solid #0055b8;
+  }
+  .page { max-width: 1120px; padding: 0 40px; margin: 0 auto; }
+  .masthead { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 22px 0; }
+  .registry-link { color: #516170; text-underline-offset: 4px; font-size: 14px; }
+  button { font: inherit; font-size: 14px; color: #0055b8; background: white; border: 1px solid #b5c9dd; padding: 8px 18px; border-radius: 999px; cursor: pointer; }
+  button:hover { background: #eff5fb; }
+  :is(a, button):focus-visible { outline: 3px solid #14776b; outline-offset: 4px; }
+  p, h1, h2, figure { margin: 0; }
+  h1, h2 { letter-spacing: 0; }
+  .intro { padding: 28px 0 36px; }
+  .eyebrow { color: #0055b8; font-size: 12px; font-weight: 700; text-transform: uppercase; }
+  h1 { margin: 12px 0 16px; font-size: 42px; line-height: 1.12; font-weight: 700; }
+  .lead { max-width: 700px; color: #516170; font-size: 19px; }
+  .benefits { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; padding: 24px 0 28px; border-block: 1px solid #d8e2eb; }
+  .benefits h2 { color: #0055b8; font-size: 17px; line-height: 1.25; margin-bottom: 6px; }
+  .benefits p { font-size: 15px; color: #516170; }
+  .use-case { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 64px; align-items: center; padding: 40px 0; border-bottom: 1px solid #d8e2eb; }
+  .case-number { color: #14776b; margin-bottom: 8px; }
+  .case-copy h2 { font-size: 28px; line-height: 1.16; margin-bottom: 16px; }
+  .case-copy > p:not(.eyebrow) { font-size: 16px; color: #516170; }
+  .case-copy .outcome { margin-top: 16px; color: #0055b8 !important; font-weight: 700; }
+  .qr-example { justify-self: center; text-align: center; }
+  .qr-artwork { padding: 16px 22px; border: 1px solid #d8e2eb; border-radius: 6px; }
+  .brand-name { color: #0055b8; font-size: 14px; font-weight: 700; }
+  .qr-image { width: 176px; height: 176px; margin: 0 auto; }
+  .qr-image :global(svg) { display: block; width: 100%; height: 100%; }
+  .branded-preview { width: 220px; max-width: 100%; margin: 0 auto; }
+  .branded-preview :global(svg) { display: block; width: 100%; height: auto; }
+  .qr-options { margin: 18px 0 0; }
+  .qr-options > div { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; margin-top: 10px; }
+  .qr-options dt { color: #0055b8; margin: 0; padding-top: 2px; }
+  .qr-options dd { font-size: 15px; }
+  .qr-url { font-size: 13px; color: #172b40; overflow-wrap: anywhere; }
+  figcaption { color: #516170; font-size: 12px; margin-top: 10px; }
+  .example-label { font-size: 12px; text-transform: uppercase; color: #516170; margin-bottom: 8px; }
+  code { font: inherit; overflow-wrap: anywhere; }
+  .long-url { display: block; color: #516170; font-size: 16px; line-height: 1.6; }
+  .short-result { margin-top: 24px; border-top: 2px solid #0055b8; padding-top: 18px; }
+  .short-result .example-label, .annual-example > .example-label { color: #0055b8; }
+  .short-url { display: block; font-size: 21px; color: #0055b8; font-weight: 700; line-height: 1.4; }
+  .destination-history { margin: 24px 0 0; }
+  .destination-history > div { padding: 14px 0; border-top: 1px solid #d8e2eb; }
+  dt { color: #516170; font-size: 12px; text-transform: uppercase; margin-bottom: 5px; }
+  dd { margin: 0; font-size: 14px; color: #516170; }
+  dd strong { display: block; font-weight: 400; color: #172b40; }
+  .destination-history > div:last-child dt, .destination-history > div:last-child strong { color: #14776b; }
+  .more-uses { background: #f1f7f6; padding: 32px; margin-top: 32px; }
+  .more-uses .eyebrow { color: #14776b; }
+  .more-uses h2 { font-size: 26px; line-height: 1.2; margin: 6px 0 10px; }
+  .more-intro { color: #516170; font-size: 16px; }
+  .more-uses-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; margin-top: 24px; }
+  .more-uses-grid article { border-top: 1px solid #cbded9; padding: 20px 0; }
+  .more-uses h3 { font-size: 18px; line-height: 1.3; letter-spacing: 0; margin: 0 0 8px; }
+  .more-uses-grid p, .naming-note p { color: #516170; font-size: 15px; }
+  .channel-use { grid-column: 1 / -1; }
+  .channel-use p { max-width: 760px; }
+  .future-note { margin-top: 8px; }
+  .future-note strong { color: #14776b; }
+  .naming-note { border-top: 1px solid #cbded9; padding-top: 20px; }
+  .naming-note h3 { font-size: 16px; color: #14776b; }
+  .naming-note code { color: #0055b8; font-weight: 700; }
+  .pilot { padding: 26px 0; display: flex; gap: 48px; align-items: baseline; }
+  .pilot h2 { font-size: 20px; color: #0055b8; }
+  .pilot p { color: #516170; font-size: 16px; }
+  footer { padding: 16px 0 32px; border-top: 1px solid #d8e2eb; font-size: 12px; color: #516170; }
+  footer p + p { margin-top: 6px; }
+  @media (max-width: 700px) {
+    .page { padding-inline: 22px; }
+    h1 { font-size: 32px; }
+    .lead { font-size: 17px; }
+    .intro { padding-top: 16px; }
+    .benefits { grid-template-columns: 1fr; gap: 18px; }
+    .use-case { grid-template-columns: 1fr; gap: 28px; padding-block: 32px; }
+    .case-copy h2 { font-size: 25px; }
+    .short-url { font-size: 19px; }
+    .pilot { flex-direction: column; gap: 8px; }
+    .more-uses { padding: 24px 20px; }
+    .more-uses-grid { grid-template-columns: 1fr; }
+  }
+  @page { size: letter; margin: 12mm; }
+  @media print {
+    :global(body) { border-top: 3px solid #0055b8; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .page { max-width: none; padding: 0; }
+    .masthead { display: none; }
+    .intro { padding: 12px 0 16px; }
+    h1 { font-size: 27px; margin: 6px 0 8px; }
+    h1 br { display: none; }
+    .lead { font-size: 12px; }
+    .eyebrow { font-size: 9px; }
+    .benefits { grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 12px 0; gap: 18px; }
+    .benefits h2 { font-size: 11px; }
+    .benefits p { font-size: 10px; }
+    .use-case { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 28px; padding: 16px 0; break-inside: avoid; }
+    .case-copy h2 { font-size: 18px; margin-bottom: 8px; }
+    .case-copy > p:not(.eyebrow) { font-size: 11px; }
+    .case-copy .outcome { margin-top: 8px; }
+    .qr-artwork { padding: 6px 12px; }
+    .qr-image { width: 96px; height: 96px; }
+    .branded-preview { width: 140px; }
+    .qr-options { margin-top: 8px; }
+    .qr-options > div { margin-top: 5px; grid-template-columns: 45px minmax(0, 1fr); gap: 8px; }
+    .qr-options dd { font-size: 10px; }
+    .brand-name, .qr-url, figcaption, .example-label { font-size: 9px; }
+    .long-url { font-size: 11px; }
+    .short-result { margin-top: 12px; padding-top: 10px; }
+    .short-url { font-size: 13px; }
+    .destination-history { margin-top: 10px; }
+    .destination-history > div { padding: 8px 0; }
+    dt { font-size: 9px; }
+    dd { font-size: 10px; }
+    .pilot { flex-direction: row; padding: 12px 0; gap: 22px; }
+    .pilot h2 { font-size: 13px; }
+    .pilot p { font-size: 11px; }
+    .more-uses { padding: 18px; margin-top: 18px; break-before: page; }
+    .more-uses h2 { font-size: 20px; }
+    .more-intro { font-size: 12px; }
+    .more-uses-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; margin-top: 16px; }
+    .more-uses-grid article { padding: 14px 0; break-inside: avoid; }
+    .more-uses h3 { font-size: 13px; }
+    .more-uses-grid p, .naming-note p { font-size: 11px; }
+    .naming-note { padding-top: 14px; break-inside: avoid; }
+    footer { font-size: 8px; padding: 10px 0 0; }
+  }
+</style>
